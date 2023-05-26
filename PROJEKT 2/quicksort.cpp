@@ -3,6 +3,8 @@
 #include <cstdlib>
 #include <fstream>
 #include <sstream>
+#include <string>
+#include <algorithm>
 #include "film.h"
 
 using namespace std;
@@ -32,9 +34,8 @@ void quickSort(vector<film>& arr, int L, int P)
 
 int main()
 {
-    system("clear");
-    int size = 10;
-
+    // system("clear");
+    int size = 15;
     string fname = "dane.csv";
     vector<film> filmy;
     vector<string> row;
@@ -50,15 +51,22 @@ int main()
         float _rating;
         string _name;
 
-        for (int nrWiersza = 0; nrWiersza < size && (getline(file, line)); nrWiersza++)
+        for (int nrWiersza = 0; nrWiersza < size && (getline(file, line)); nrWiersza++)//zczytuje wiersze
         {
             ktorePole = 0;
-            row.clear();
             stringstream stream(line);
 
-            while (getline(stream, word, ','))
+            while (getline(stream, word, ','))//zczytuje linie
             {
-                // cout<<"ktore pole: "<<ktorePole<<" word to teraz: "<<word<<endl;
+                /*USUN CWIRBELKI JESLI SA BO PSUJA KONSTRUKTOR W SWITCHU*/
+                while(word.find('\"')!=string::npos){
+                    cout<<"mamy to!"<<endl;
+                    word.erase(remove(word.begin(),word.end(),'\"'),word.end());
+                    cout<<word<<endl;
+                }
+
+                /*USUN DODATKOWY TRZECI PRZECINEK*/
+
                 switch (ktorePole)
                 {
                 case 0:
@@ -73,6 +81,7 @@ int main()
                     film *tmp = new film(_nr, _name, _rating);
                     filmy.push_back(*tmp);
                     break;
+                    
                 }
                 default:
                     ktorePole = -1;
@@ -88,7 +97,7 @@ int main()
         cout << "Could not open the file !\n";
     }
 
-    cout<<"przed sortowaniem: \n";
+    cout<<"\nprzed sortowaniem: \n\n";
     for (int i = 0; i < filmy.size(); i++)
     {
         cout << filmy[i];
@@ -96,7 +105,7 @@ int main()
 
     quickSort(filmy,0,size-1);
 
-    cout<<"po sortowaniu: \n";
+    cout<<"\npo sortowaniu: \n\n";
     for (int i = 0; i < filmy.size(); i++)
     {
         cout << filmy[i];
