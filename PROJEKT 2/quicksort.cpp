@@ -32,10 +32,10 @@ void quickSort(vector<film> &arr, int L, int P)
     }
 }
 
-int main()
+int main(int argc, char *argv[])
 {
     // system("clear");
-    int size = 5;
+    int size =stoi(argv[1]);
     string fname = "dane.csv";
     vector<film> filmy;
     vector<string> row;

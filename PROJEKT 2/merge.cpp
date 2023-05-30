@@ -40,7 +40,7 @@ void merge(vector<film> &filmyVector, int left, int right, int mid)//int array[]
     {
         /*jesli liczba w lewej tablicy mniejsza
         wpisac ja do glownej*/
-        if (leftArray[leftIndex].rating > rightArray[rightIndex].rating)
+        if (leftArray[leftIndex].rating <rightArray[rightIndex].rating)
         {
             filmyVector[mergedIndex] = leftArray[leftIndex];
             //cout<<leftArray[leftIndex].rating <<"<"<<rightArray[rightIndex].rating<<endl;
@@ -99,18 +99,10 @@ void mergeSort(vector <film> &array, int left_begin, int right_end)//int array[]
 }
 
 
-int main()
+int main(int argc, char *argv[])
 {
-    // int arr[] = {12, 11, 13, 5, 6, 7,11,0,1};
-    // auto arr_size = sizeof(arr) / sizeof(arr[0]);
 
-    // cout << "Given array is: \n";
-    // printArray(arr,arr_size);
-    // cout << "\nSorted array is: \n";
-    // mergeSort(arr, 0, arr_size - 1);
-    // printArray(arr,arr_size);
-
-    int dataQuantity = 10;
+    int dataQuantity = stoi(argv[1]);
     string fname = "dane.csv";
     vector<film> filmy;
     vector<string> row;
