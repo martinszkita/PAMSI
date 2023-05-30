@@ -1,9 +1,9 @@
 #mergesort
-merge: merge.o film.o
-	g++ merge.o film.o -o merge
+merge: mergesort.o film.o
+	g++ mergesort.o film.o -o merge
 
-merge.o:merge.cpp
-	g++ -c merge.cpp
+mergesort.o:mergesort.cpp
+	g++ -c mergesort.cpp
 
 #quicksort
 quick: quicksort.o film.o
@@ -12,6 +12,13 @@ quick: quicksort.o film.o
 quicksort.o: quicksort.cpp
 	g++ -c quicksort.cpp
 
+#heapsort
+heap: heapsort.o film.o
+	g++ heapsort.o film.o -o heap
+
+heapsort.o: heapsort.cpp
+	g++ -c heapsort.cpp
+
 #common
 film.o:film.cpp
 	g++ -c film.cpp
@@ -19,3 +26,4 @@ film.o:film.cpp
 clean:
 	rm *.o merge
 	rm *.o quick
+	rm *.o heap
