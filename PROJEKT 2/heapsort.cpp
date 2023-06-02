@@ -1,31 +1,41 @@
-#include <vector>
 #include <iostream>
-#include <iomanip>
+#include <vector>
+#include <cstdlib>
+#include <fstream>
+#include <sstream>
+#include <string>
+#include <algorithm>
+#include "film.h"
+
+template <typename T>
 class MaxHeap
 {
 private:
-public:
-    // Constructor
-    MaxHeap();
-
-    // Heap operations
-    void insert(int value);
-    int extractMax();
-    void printHeap();
-    void heapSort();
-
     // Helper functions
     void heapifyUp(int index);
     void heapifyDown(int index);
-    std::vector<int> heap;
+
+public:
+    // Constructor
+    MaxHeap();
+    std::vector<T> heap;
+    // Heap operations
+    void insert(T value);
+    T extractMax();
+    void printHeap();
+    void heapSort();
     bool isMax();
+    // T getHeap() const;
+    // void setHeap(vector<T> tmp);
 };
 
-MaxHeap::MaxHeap() {}
+template <typename T>
+MaxHeap<T>::MaxHeap() {}
 
-void MaxHeap::heapifyUp(int index)
+template <typename T>
+void MaxHeap<T>::heapifyUp(int index)
 {
-    if (index <= 1)
+    if (index < 1)
         return;
 
     int parent = (index - 1) / 2;
@@ -37,7 +47,8 @@ void MaxHeap::heapifyUp(int index)
     }
 }
 
-void MaxHeap::heapifyDown(int index)
+template <typename T>
+void MaxHeap<T>::heapifyDown(int index)
 {
     int leftChild = 2 * index + 1;
     int rightChild = 2 * index + 2;
@@ -56,30 +67,34 @@ void MaxHeap::heapifyDown(int index)
     }
 }
 
-void MaxHeap::printHeap()
+template <typename T>
+void MaxHeap<T>::printHeap()
 {
-    for (int value : heap)
+    for (T tmp : heap)
     {
-        std::cout << value << " ";
+        std::cout << tmp << " ";
     }
     std::cout << std::endl;
 }
-void MaxHeap::insert(int value)
+
+template <typename T>
+void MaxHeap<T>::insert(T value)
 {
     heap.push_back(value);
     heapifyUp(heap.size() - 1);
-    // this->printHeap();
+    // printHeap();
 }
 
-int MaxHeap::extractMax()
+template <typename T>
+T MaxHeap<T>::extractMax()
 {
     if (heap.empty())
     {
-        std::cout << "Heap is empty." << std::endl;
-        return -1; // Or any appropriate handling of empty heap
+        std::cout << "Heap is empty, can't extract max element!" << std::endl;
+        return T();
     }
 
-    int maxElement = heap[0];
+    T maxElement = heap[0];
     heap[0] = heap.back();
     heap.pop_back();
     heapifyDown(0);
@@ -87,7 +102,8 @@ int MaxHeap::extractMax()
     return maxElement;
 }
 
-bool MaxHeap::isMax()
+template <typename T>
+bool MaxHeap<T>::isMax()
 {
     for (int i = 1; i < heap.size(); i++)
     {
@@ -100,31 +116,103 @@ bool MaxHeap::isMax()
     return true;
 }
 
-
-void MaxHeap::heapSort()
+template <typename T>
+void MaxHeap<T>::heapSort()
 {
-    MaxHeap tmp;
+    if (!this->isMax())
+    {
+        cout << "the heap is not a max heap, cant sort sorry!\n";
+        return;
+    }
+
+    MaxHeap<T> tmp;
     while (!heap.empty())
     {
-        tmp.heap.push_back(this->extractMax());
+        // cout<<extractMax()<<endl;
+        tmp.heap.push_back(extractMax());
     }
-    this->heap = tmp.heap;
+    heap = tmp.heap;
 }
 
-int main()
-{
-    system("clear");
-    srand(time(NULL));
-    MaxHeap h;
-    for (int i = 0; i < 10; i++)
-    {
-        h.insert(rand() % 100);
-    }
-    h.printHeap();
 
-    h.heapSort();
-    for (int i = h.heap.size() - 1; i >= 0; i--)
-    {
-        std::cout << h.heap[i] << " ";
+int main(int argc, char *argv[])
+{
+    srand(time(NULL));
+    int dataQuantity = stoi(argv[1]);
+    string fname = "dane.csv";
+    vector<film> filmy;
+    vector<string> row;
+    string line;
+    string word;
+    MaxHeap<film> h;
+
+
+
+
+    /*deklaracja pliku wejsciowego*/
+    fstream file(fname, ios::in);
+
+    if (file.is_open())
+    { // jesli udalo sie otworzyc plik
+        /*dla kazdego wiersza z pliku zapisuje do jednej linijki*/
+        int ktorePole;
+        int _nr;
+        float _rating;
+        string _name;
+
+        for (int nrWiersza = 0; nrWiersza < dataQuantity && (getline(file, line)); nrWiersza++)
+        {
+            ktorePole = 0;
+            row.clear();
+            stringstream stream(line);
+
+            while (getline(stream, word, ','))
+            {
+                // cout<<"ktore pole: "<<ktorePole<<" word to teraz: "<<word<<endl;
+                switch (ktorePole)
+                {
+                case 0:
+                    _nr = stoi(word);
+                    break;
+                case 1:
+                    _name = word;
+                    break;
+                case 2:
+                {
+                    _rating = stof(word);
+                    film *tmp = new film(_nr, _name, _rating);
+                    // filmy.push_back(*tmp);
+                    h.insert(*tmp);
+
+                    break;
+                }
+                default:
+                    ktorePole = -1;
+                    break;
+                }
+                ktorePole++;
+            }
+        }
     }
+
+    else
+    {
+
+        cout << "Could not open the file !\n";
+    }
+
+    // jest vector obiektow typu film elegancko
+    cout << "before heapsort: \n";
+    for (int i = 0; i < filmy.size(); i++)
+    {
+        cout << filmy[i];
+    }
+
+    
+    // h.heap = filmy;
+    h.printHeap();
+    h.heapSort();
+
+    cout << "after heapsort:\n";
+    h.printHeap();
 }

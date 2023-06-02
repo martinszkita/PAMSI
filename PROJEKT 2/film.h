@@ -10,7 +10,10 @@ public:
     string name;
     film();
     film(int _nr, string _name, float _rating);
+    bool operator < (const film & tmp)const;
+    bool operator > (const film & tmp)const;
 };
 
 ostream &operator<<(ostream &out, const film &_film);
 istream &operator>>(istream &in,film &_film);
+
