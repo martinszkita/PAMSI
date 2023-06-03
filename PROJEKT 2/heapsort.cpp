@@ -5,6 +5,7 @@
 #include <sstream>
 #include <string>
 #include <algorithm>
+#include <chrono>
 #include "film.h"
 
 template <typename T>
@@ -132,9 +133,10 @@ void MaxHeap<T>::heapSort()
 
 int main(int argc, char *argv[])
 {
+    auto start = std::chrono::steady_clock::now();
     int size = stoi(argv[1]);
     string inputFileName = "dane.csv";
-    string outputFileName = "output.csv";
+    string outputFileName = "outputHeapSort.csv";
     vector<film> filmy;
     vector<string> row;
     string line;
@@ -197,8 +199,6 @@ int main(int argc, char *argv[])
         {
             output << element;
         }
-        // output.seekp(-1, std::ios_base::end); // Remove the trailing comma
-        // output << std::endl;
     }
     else
     {
@@ -206,4 +206,8 @@ int main(int argc, char *argv[])
         return -1;
     }
     output.close();
+    auto end = std::chrono::steady_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+    std::cout << "Execution time: " << duration << " milliseconds" <<"for "<<size<<" lines of data"<< std::endl;
+    
 }

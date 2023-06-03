@@ -5,11 +5,12 @@
 #include <sstream>
 #include <cctype>
 #include <cstring>
+#include <chrono>
 #include "film.h"
 
 using namespace std;
 
-void merge(vector<film> &filmyVector, int left, int right, int mid)//int array[] --> vector <filmy>
+void merge(vector<film> &filmyVector, int left, int right, int mid) // int array[] --> vector <filmy>
 {
     // rozmiary prawej i lewej podtablicy
     auto leftSize = mid - left + 1;
@@ -40,10 +41,10 @@ void merge(vector<film> &filmyVector, int left, int right, int mid)//int array[]
     {
         /*jesli liczba w lewej tablicy mniejsza
         wpisac ja do glownej*/
-        if (leftArray[leftIndex].rating <rightArray[rightIndex].rating)
+        if (leftArray[leftIndex].rating >= rightArray[rightIndex].rating)
         {
             filmyVector[mergedIndex] = leftArray[leftIndex];
-            //cout<<leftArray[leftIndex].rating <<"<"<<rightArray[rightIndex].rating<<endl;
+            // cout<<leftArray[leftIndex].rating <<"<"<<rightArray[rightIndex].rating<<endl;
             /*liczba z lewej podtablicy zostaje wpisana
             do glownej tablicy wiec przesuwamy wskaznik
             w lewej zeby zaczac porownywac kolejna liczbe*/
@@ -85,7 +86,7 @@ void merge(vector<film> &filmyVector, int left, int right, int mid)//int array[]
     // delete[] rightArray;
 }
 
-void mergeSort(vector <film> &array, int left_begin, int right_end)//int array[]
+void mergeSort(vector<film> &array, int left_begin, int right_end) // int array[]
 {
     // przypadek bazowy
     if (left_begin >= right_end)
@@ -98,19 +99,19 @@ void mergeSort(vector <film> &array, int left_begin, int right_end)//int array[]
     merge(array, left_begin, right_end, mid);
 }
 
-
 int main(int argc, char *argv[])
 {
-
+    auto start = std::chrono::steady_clock::now();
     int dataQuantity = stoi(argv[1]);
     string fname = "dane.csv";
+    string outputFileName = "outputMergeSort.csv";
     vector<film> filmy;
     vector<string> row;
     string line;
     string word;
 
-    /*deklaracja pliku wejsciowego*/
     fstream file(fname, ios::in);
+    ofstream output(outputFileName, ios::out);
 
     if (file.is_open())
     { // jesli udalo sie otworzyc plik
@@ -119,31 +120,34 @@ int main(int argc, char *argv[])
         int _nr;
         float _rating;
         string _name;
-        
-        for (int nrWiersza = 0; nrWiersza< dataQuantity && (getline(file, line)); nrWiersza++)
+
+        for (int nrWiersza = 0; nrWiersza < dataQuantity && (getline(file, line)); nrWiersza++)
         {
             ktorePole = 0;
             row.clear();
             stringstream stream(line);
 
-            while (getline(stream, word, ',')){
+            while (getline(stream, word, ','))
+            {
                 // cout<<"ktore pole: "<<ktorePole<<" word to teraz: "<<word<<endl;
-                switch(ktorePole){
-                    case 0:
-                        _nr = stoi(word);
-                        break;
-                    case 1:
-                        _name = word;
-                        break;
-                    case 2:{
-                        _rating = stof(word);
-                        film* tmp = new film(_nr, _name, _rating);
-                        filmy.push_back(*tmp);
-                        break;
-                    }
-                    default:
-                        ktorePole = -1;
-                        break;
+                switch (ktorePole)
+                {
+                case 0:
+                    _nr = stoi(word);
+                    break;
+                case 1:
+                    _name = word;
+                    break;
+                case 2:
+                {
+                    _rating = stof(word);
+                    film *tmp = new film(_nr, _name, _rating);
+                    filmy.push_back(*tmp);
+                    break;
+                }
+                default:
+                    ktorePole = -1;
+                    break;
                 }
                 ktorePole++;
             }
@@ -152,25 +156,28 @@ int main(int argc, char *argv[])
 
     else
     {
-        
+
         cout << "Could not open the file !\n";
+        return -1;
     }
 
-    //jest vector obiektow typu film elegancko
-    cout<<"przed sortowaniem: \n";
-    for (int i = 0; i < filmy.size(); i++)
-    {
-        cout << filmy[i];
-    }
-   
     mergeSort(filmy, 0, filmy.size() - 1);
-    
-    cout<<"po sortowaniu:\n";
-    for (int i = 0; i < filmy.size(); i++)
+
+    if (output.is_open())
     {
-        cout << filmy[i];
+        std::cout << "otwarlem output!\n";
+        for (const auto &element : filmy)
+        {
+            output << element;
+        }
     }
-
-    
-
+    else
+    {
+        std::cout << "nie otwarlem outputu\n";
+        return -1;
+    }
+    output.close();
+    auto end = std::chrono::steady_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+    std::cout << "Execution time: " << duration << " milliseconds" <<"for "<<dataQuantity<<" lines of data"<< std::endl;
 }

@@ -5,6 +5,7 @@
 #include <sstream>
 #include <string>
 #include <algorithm>
+#include <chrono>
 #include "film.h"
 
 using namespace std;
@@ -19,7 +20,7 @@ void quickSort(vector<film> &arr, int L, int P)
 
         while (j < pivot)
         {
-            if (arr[j].rating <= arr[pivot].rating)
+            if (arr[j].rating < arr[pivot].rating)
             {
                 swap(arr[i], arr[j]);
                 i++;
@@ -34,14 +35,16 @@ void quickSort(vector<film> &arr, int L, int P)
 
 int main(int argc, char *argv[])
 {
-    // system("clear");
-    int size =stoi(argv[1]);
+    auto start = std::chrono::steady_clock::now();
+    int size = stoi(argv[1]);
     string fname = "dane.csv";
+    string outputFileName = "outputQuickSort.csv";
     vector<film> filmy;
     vector<string> row;
     string line;
     string word;
     fstream file(fname, ios::in);
+    ofstream output(outputFileName, ios::out);
 
     if (file.is_open())
     { // jesli udalo sie otworzyc plik
@@ -85,19 +88,26 @@ int main(int argc, char *argv[])
     else
     {
         cout << "Could not open the file !\n";
-    }
-
-    cout << "\nprzed sortowaniem: \n\n";
-    for (int i = 0; i < filmy.size(); i++)
-    {
-        cout << filmy[i];
+        return -1;
     }
 
     quickSort(filmy, 0, size - 1);
 
-    cout << "\npo sortowaniu: \n\n";
-    for (int i = 0; i < filmy.size(); i++)
+    if (output.is_open())
     {
-        cout << filmy[i];
+        std::cout << "otwarlem output!\n";
+        for (const auto &element : filmy)
+        {
+            output << element;
+        }
     }
+    else
+    {
+        std::cout << "nie otwarlem outputu\n";
+        return -1;
+    }
+    output.close();
+    auto end = std::chrono::steady_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+    std::cout << "Execution time: " << duration << " milliseconds" <<"for "<<size<<" lines of data"<< std::endl;
 }
