@@ -16,17 +16,13 @@ private:
     void heapifyDown(int index);
 
 public:
-    // Constructor
     MaxHeap();
     std::vector<T> heap;
-    // Heap operations
-    void insert(T value);
     T extractMax();
+    void insert(T value);
     void printHeap();
     void heapSort();
     bool isMax();
-    // T getHeap() const;
-    // void setHeap(vector<T> tmp);
 };
 
 template <typename T>
@@ -35,7 +31,7 @@ MaxHeap<T>::MaxHeap() {}
 template <typename T>
 void MaxHeap<T>::heapifyUp(int index)
 {
-    if (index < 1)
+    if (index < 1) // caly dzien szukania bledu a to tylko index <=1 ikftsvutyrwuyrtwsyer
         return;
 
     int parent = (index - 1) / 2;
@@ -134,23 +130,18 @@ void MaxHeap<T>::heapSort()
     heap = tmp.heap;
 }
 
-
 int main(int argc, char *argv[])
 {
-    srand(time(NULL));
-    int dataQuantity = stoi(argv[1]);
-    string fname = "dane.csv";
+    int size = stoi(argv[1]);
+    string inputFileName = "dane.csv";
+    string outputFileName = "output.csv";
     vector<film> filmy;
     vector<string> row;
     string line;
     string word;
     MaxHeap<film> h;
-
-
-
-
-    /*deklaracja pliku wejsciowego*/
-    fstream file(fname, ios::in);
+    fstream file(inputFileName, ios::in);
+    ofstream output(outputFileName, ios::out);
 
     if (file.is_open())
     { // jesli udalo sie otworzyc plik
@@ -160,7 +151,7 @@ int main(int argc, char *argv[])
         float _rating;
         string _name;
 
-        for (int nrWiersza = 0; nrWiersza < dataQuantity && (getline(file, line)); nrWiersza++)
+        for (int nrWiersza = 0; nrWiersza < size && (getline(file, line)); nrWiersza++)
         {
             ktorePole = 0;
             row.clear();
@@ -181,9 +172,7 @@ int main(int argc, char *argv[])
                 {
                     _rating = stof(word);
                     film *tmp = new film(_nr, _name, _rating);
-                    // filmy.push_back(*tmp);
                     h.insert(*tmp);
-
                     break;
                 }
                 default:
@@ -197,22 +186,24 @@ int main(int argc, char *argv[])
 
     else
     {
-
-        cout << "Could not open the file !\n";
+        std::cout << "Could not open the input file !\n";
     }
-
-    // jest vector obiektow typu film elegancko
-    cout << "before heapsort: \n";
-    for (int i = 0; i < filmy.size(); i++)
-    {
-        cout << filmy[i];
-    }
-
-    
-    // h.heap = filmy;
-    h.printHeap();
     h.heapSort();
 
-    cout << "after heapsort:\n";
-    h.printHeap();
+    if (output.is_open())
+    {
+        std::cout << "otwarlem output!\n";
+        for (const auto &element : h.heap)
+        {
+            output << element;
+        }
+        // output.seekp(-1, std::ios_base::end); // Remove the trailing comma
+        // output << std::endl;
+    }
+    else
+    {
+        std::cout << "nie otwarlem outputu\n";
+        return -1;
+    }
+    output.close();
 }
