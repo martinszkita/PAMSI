@@ -8,5 +8,10 @@ int main(int argc , char * argv[]){
 
     board b;
     b.printBoard();
-    return 0;
+    b.oMove(1,1);
+    std::cout<<std::endl;
+    b.printBoard();
+    b.xMove(0,0);
+    std::cout<<std::endl;
+    b.printBoard();
 }

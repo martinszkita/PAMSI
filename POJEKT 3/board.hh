@@ -29,22 +29,13 @@ struct pieces
 
 class board
 {
-    std::vector<pieces> area;
+    std::vector<pieces> pcs;
+    char piecesBoard[SIZE][2*SIZE-1];
 
 public:
     void printBoard();
-    void makeMove(square sq);
+    void xMove(int x, int y); // put a "x" character on the board
+    void oMove(int x, int y); // put a "o" character on the board
     board();
 };
 
-void board::printBoard()
-{
-    for (int i = 0; i < SIZE; i++)
-    {
-        for (int j = 0; j < SIZE; j++)
-        {
-            std::cout << "| ";
-        }
-        std::cout << std::endl;
-    }
-}
