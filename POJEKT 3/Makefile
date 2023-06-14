@@ -11,4 +11,4 @@ clean:
 	rm *.o
 
 output: main.o board.o kik.o
-	g++ -o output main.o board.o kik.o
+	g++ -o output main.o board.o kik.o -g

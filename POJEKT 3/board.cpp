@@ -1,40 +1,34 @@
 #include "board.hh"
+#include <iostream>
 
 board::board()
 {
-    int i = 0;
-    int j;
-    for (; i <  SIZE ; i++)
+    for (int i = 0; i < SIZE; i++)
     {
-        j = 0;
-        for (; j < 2 * SIZE - 1; j++)
+        for (int j = 0; j < SIZE; j++)
         {
-            if (j % 2 != 0)
-            {
-                std::cout << "drukuje kreche na " << j << "-tym miejscu w " << i << "-tym wierszu\n";
-                piecesBoard[i][j] = '|';
-            }
-            else{
-                piecesBoard[i][j] = ' ';
-            }
+            piecesBoard[i][j] = ' ';
         }
     }
 }
-void board::printBoard()
+
+std::ostream &operator<<(std::ostream &os, const board &b)
 {
     for (int i = 0; i < SIZE; i++)
     {
-        for (int j = 0; j < 2 * SIZE - 1; j++)
+        for (int j = 0; j < SIZE; j++)
         {
-            std::cout << piecesBoard[i][j];
+            if (j >= 0 && j < SIZE - 1)
+            {
+                os << b.piecesBoard[i][j] << "|";
+            }
+            else
+            {
+                os << b.piecesBoard[i][j];
+            }
         }
-        std::cout << std::endl;
-    }
-}
-void board::xMove(int x, int y) {
-    piecesBoard[x][2*y]='x';
-}
 
-void board::oMove(int x, int y) {
-    piecesBoard[x][2*y]='o';
+        os << std::endl;
+    }
+    return os;
 }
