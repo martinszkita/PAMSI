@@ -1,4 +1,3 @@
 # PAMSI
-## Projektowanie Algorytmów i Metody Sztucznej Inteligencji
-### Zadania Projektowe
+## Zadania Projektowe na kurs Projektowanie Algorytmów i Metody Sztucznej Inteligencji
 
