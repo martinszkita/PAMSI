@@ -1,3 +1,0 @@
-/home/marcin/Desktop/PAMSI/POJEKT 3/build/CMakeFiles/przyklad.dir
-/home/marcin/Desktop/PAMSI/POJEKT 3/build/CMakeFiles/edit_cache.dir
-/home/marcin/Desktop/PAMSI/POJEKT 3/build/CMakeFiles/rebuild_cache.dir

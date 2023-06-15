@@ -1,1 +1,0 @@
-/usr/bin/g++ -g CMakeFiles/PROJEKT3.dir/src/main.cpp.o CMakeFiles/PROJEKT3.dir/src/board.cpp.o CMakeFiles/PROJEKT3.dir/src/kik.cpp.o -o bin/PROJEKT3 
