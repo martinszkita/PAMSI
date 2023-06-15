@@ -1,1 +1,0 @@
-/usr/bin/g++ -g -rdynamic CMakeFiles/przyklad.dir/src/main.cpp.o CMakeFiles/przyklad.dir/src/kik.cpp.o CMakeFiles/przyklad.dir/src/board.cpp.o -o przyklad 
