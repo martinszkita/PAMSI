@@ -4,15 +4,21 @@
 #include <vector>
 #include <iostream>
 
-struct pawn
+struct position
 {
     int x;
     int y;
+    position(){}
+    position(int xx, int yy)
+    {
+        x = xx;
+        y = yy;
+    }
 };
 
 class board
 {
-    std::vector<pawn> pawnsVec;
+    // std::vector<pawn> pawnsVec;
 
 public:
     board();

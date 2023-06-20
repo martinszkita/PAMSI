@@ -16,9 +16,14 @@ class kik
     bool horizontalStreak();
     bool gameOver();
     bool streak();
+    bool tie();
+
+    int whoWon;//1 -> x , -1 -> o , 0 ->tie
+    int minmax(int depth,bool isMaximizingPlayer);
+    position findBestMove();
 
 public:
     kik();
     board b;
-    void play();
+    void play(int mode);
 };
